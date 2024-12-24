@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const { device } = require("./device_model.js");
 const ticketSchema = mongoose.Schema(
   {
     type: {
