@@ -5,17 +5,28 @@ const { sendToClient } = require("../utils/functions/send_to_client.js");
 const getTicketsHandler = async (connectionId, body) => {
   console.log("Get Tickets route triggered");
   try {
+    // find the tickets whose status are open or that are created today
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to start of the day
+
     const tickets = await ticket
-      .find({ status: "Open" })
+      .find({
+        $or: [
+          { status: "Open" },
+          { createdAt: { $gte: today } }, // Tickets created today
+        ],
+      })
       .sort({ createdAt: -1 })
       .populate("device");
 
     console.log("Tickets fetched successfully:", tickets);
-    await sendToClient(connectionId, {tickets: tickets });
+    await sendToClient(connectionId, {
+      tickets: tickets,
+    });
   } catch (err) {
     console.log("Error fetching tickets:", err);
   }
-  //sendToClient(connectionId,{tickets:tickets});
 };
 
 module.exports = {

@@ -19,7 +19,7 @@ const ticketSchema = mongoose.Schema(
       default: "Open",
     },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 
 const ticket = mongoose.model("ticket", ticketSchema);
