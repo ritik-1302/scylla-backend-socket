@@ -1,24 +1,45 @@
-//Route Handler imports
-const { connectHandler } = require("./routes/connect_handler.js");
-const { disconnectHandler } = require("./routes/disconnect_handler.js");
-const { defaultHandler } = require("./routes/default_handler.js");
-const { broadcast_handler } = require("./routes/broadcast_handler.js");
-const { getTicketsHandler } = require("./routes/get_tickets_handler.js");
+//Socket Handler imports
+const { connectHandler } = require("./socket/connect_handler.js");
+const { disconnectHandler } = require("./socket/disconnect_handler.js");
+const { defaultHandler } = require("./socket/default_handler.js");
+const { broadcast_handler } = require("./socket/broadcast_handler.js");
+const { ticketHandler } = require("./socket/ticket_handler.js");
+
+//REST api Handler Imports
+const { testHandler } = require("./api/test_handler.js");
+
 //Functions
 const { connectDB } = require("./utils/functions/db_connection.js");
 
-const routeHandlers = {
+const socketRouter = {
   $connect: connectHandler,
   $disconnect: disconnectHandler,
   $default: defaultHandler,
   broadcast: broadcast_handler,
-  getTickets: getTicketsHandler,
+  ticket: ticketHandler,
+};
+const apiRouter = {
+  "/test": testHandler,
 };
 
-module.exports.handler = async (event) => {
+// eslint-disable-next-line no-unused-vars
+module.exports.handler = async (event,context,callback) => {
   await connectDB();
 
-  if (event.requestContext) {
+  console.log("This is event ", event);
+
+  if (event.httpMethod) {
+    const path = event.path;
+    console.log("Request body", event.body);
+    console.log("api path", path);
+
+    const handler = apiRouter[path];
+
+    const res=await handler(event,context,callback);
+
+    return res;
+
+  } else {
     const connectionId = event.requestContext.connectionId;
     const routeKey = event.requestContext.routeKey;
     let body = {};
@@ -38,9 +59,10 @@ module.exports.handler = async (event) => {
     console.log("Route key", routeKey);
 
     // Handle different routeKeys (WebSocket events)
-    const handler = routeHandlers[routeKey] || routeHandlers["$default"];
+    const handler = socketRouter[routeKey] || socketRouter["$default"];
 
     await handler(connectionId, body);
+    return { statusCode: 200 };
+
   }
-  return { statusCode: 200 };
 };
