@@ -7,6 +7,7 @@ const { ticketHandler } = require("./socket/ticket_handler.js");
 
 //REST api Handler Imports
 const { testHandler } = require("./api/test_handler.js");
+const { ticketApiHandler } = require("./api/ticket_api_handler.js");
 
 //Functions
 const { connectDB } = require("./utils/functions/db_connection.js");
@@ -20,6 +21,8 @@ const socketRouter = {
 };
 const apiRouter = {
   "/test": testHandler,
+  "/ticket":ticketApiHandler
+
 };
 
 // eslint-disable-next-line no-unused-vars

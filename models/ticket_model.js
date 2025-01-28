@@ -19,6 +19,10 @@ const ticketSchema = mongoose.Schema(
       enum: ["Open", "Closed"],
       default: "Open",
     },
+    message: {
+      type: String,
+      
+    },
   },
   { timestamps: true }
 );
