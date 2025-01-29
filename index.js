@@ -4,11 +4,12 @@ const { disconnectHandler } = require("./socket/disconnect_handler.js");
 const { defaultHandler } = require("./socket/default_handler.js");
 const { broadcast_handler } = require("./socket/broadcast_handler.js");
 const { ticketHandler } = require("./socket/ticket_handler.js");
+const {chatHandler}=require("./socket/chat_handler.js")
 
 //REST api Handler Imports
 const { testHandler } = require("./api/test_handler.js");
 const { ticketApiHandler } = require("./api/ticket_api_handler.js");
-
+const {chatApiHandler}=require("./api/chat_api_handler.js")
 //Functions
 const { connectDB } = require("./utils/functions/db_connection.js");
 
@@ -18,14 +19,15 @@ const socketRouter = {
   $default: defaultHandler,
   broadcast: broadcast_handler,
   ticket: ticketHandler,
+  chat:chatHandler
 };
 const apiRouter = {
   "/test": testHandler,
-  "/ticket":ticketApiHandler
+  "/ticket":ticketApiHandler,
+  "/chat":chatApiHandler
 
 };
 
-// eslint-disable-next-line no-unused-vars
 module.exports.handler = async (event,context,callback) => {
   await connectDB();
 

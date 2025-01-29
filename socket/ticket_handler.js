@@ -14,7 +14,6 @@ const ticketRouter = {
 
 
 
-// eslint-disable-next-line no-unused-vars
 const ticketHandler = async (connectionId, body) => {
   const requestKey=body.requestName;
   const handler=ticketRouter[requestKey]||ticketRouter['default'];

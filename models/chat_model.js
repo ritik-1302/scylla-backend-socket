@@ -8,7 +8,7 @@ const chatSchema = mongoose.Schema(
       required:true
     },
     messageObject: {
-      type: String,
+      type: Object,
       required: true,
     },
   },
@@ -18,5 +18,5 @@ const chatSchema = mongoose.Schema(
 const chat = mongoose.model("chat", chatSchema);
 
 module.exports = {
-  chat,
+  chat
 };
