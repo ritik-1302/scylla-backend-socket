@@ -14,7 +14,7 @@ const deviceSchema = mongoose.Schema({
   guest: {
     type: mongoose.Schema.ObjectId,
     ref: "guest",
-  },
+  }
 });
 
 const device = mongoose.model("device", deviceSchema);
